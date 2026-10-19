@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISAAC Voting System • Secure Digital Democracy Platform</title>
+  <meta name="description" content="Enterprise-grade online voting platform built for trust, transparency, and accessibility.">
+  
+  <!-- Premium Favicon (Inline SVG for guaranteed rendering) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23081426'/><text x='50' y='68' font-family='sans-serif' font-size='50' font-weight='bold' fill='%23D6B574' text-anchor='middle'>I</text></svg>">
+  
+  <!-- Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================
+       1. CORE VARIABLES & RESET
+       ========================================= */
+    :root {
+      --midnight-navy: #081426;
+      --royal-blue: #123B72;
+      --electric-blue: #3B82F6;
+      --cyan-highlight: #06B6D4;
+      --premium-gold: #D6B574;
+      --premium-gold-light: #E8D5A3;
+      --crisp-white: #FFFFFF;
+      --soft-ivory: #F7F8FC;
+      --surface-dark: #0B1A33;
+      --surface-light: #112240;
+      
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      
+      --shadow-sm: 0 2px 8px rgba(8, 20, 38, 0.08);
+      --shadow-md: 0 8px 24px rgba(8, 20, 38, 0.12);
+      --shadow-lg: 0 16px 48px rgba(8, 20, 38, 0.18);
+      --shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+      --shadow-glow-gold: 0 0 20px rgba(214, 181, 116, 0.2);
+
+      --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--soft-ivory);
+      color: var(--midnight-navy);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--midnight-navy);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color var(--transition-fast);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* =========================================
+       2. PREMIUM BUTTONS
+       ========================================= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.75rem;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-lg {
+      padding: 1rem 2rem;
+      font-size: 1.05rem;
+    }
+
+    .btn-primary-blue {
+      background: linear-gradient(135deg, var(--royal-blue) 0%, var(--electric-blue) 100%);
+      color: var(--crisp-white);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary-blue:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-outline-gold {
+      background: transparent;
+      color: var(--premium-gold);
+      border: 1.5px solid var(--premium-gold);
+    }
+
+    .btn-outline-gold:hover {
+      background: rgba(214, 181, 116, 0.1);
+      color: var(--premium-gold-light);
+      border-color: var(--premium-gold-light);
+      box-shadow: var(--shadow-glow-gold);
+    }
+
+    .btn-outline-white {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--crisp-white);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-outline-white:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: var(--crisp-white);
+    }
+
+    .arrow {
+      transition: transform var(--transition-fast);
+    }
+
+    .btn:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    /* =========================================
+       3. NAVBAR (Glassmorphism & Premium)
+       ========================================= */
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1rem 0;
+      transition: all var(--transition-smooth);
+      background: transparent;
+    }
+
+    #navbar.scrolled {
+      background: rgba(8, 20, 38, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(214, 181, 116, 0.15);
+      padding: 0.75rem 0;
+      box-shadow: var(--shadow-md);
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--crisp-white);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--premium-gold) 0%, var(--premium-gold-light) 100%);
+      color: var(--midnight-navy);
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      box-shadow: var(--shadow-glow-gold);
+    }
+
+    .gold-text {
+      color: var(--premium-gold);
+    }
+
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .mobile-menu-btn span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--crisp-white);
+      border-radius: 2px;
+      transition: all var(--transition-fast);
+    }
+
+    #navLinks {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: rgba(8, 20, 38, 0.95);
+      backdrop-filter: blur(16px);
+      padding: 1.5rem;
+      flex-direction: column;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(214, 181, 116, 0.2);
+      transform: translateY(-10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all var(--transition-smooth);
+    }
+
+    #navLinks.active {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #navLinks .btn {
+      width: 100%;
+      text-align: center;
+    }
+
+    /* =========================================
+       4. HERO SECTION (Cinematic & Image-Rich)
+       ========================================= */
+    .hero-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background-color: var(--midnight-navy);
+      overflow: hidden;
+      padding-top: 80px;
+    }
+
+    .hero-bg-image {
+      position: absolute;
+      inset: 0;
+      /* High-quality reliable image of a ballot/voting concept */
+      background-image: url('https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&q=80&w=1600');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.35;
+      transform: scale(1.05);
+      transition: transform 10s ease-out;
+    }
+
+    .hero-section:hover .hero-bg-image {
+      transform: scale(1.0);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--midnight-navy) 0%, rgba(8, 20, 38, 0.85) 50%, rgba(8, 20, 38, 0.4) 100%);
+    }
+
+    .hero-overlay::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(to top, var(--soft-ivory), transparent);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      padding: 4rem 0;
+    }
+
+    .hero-text h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--crisp-white);
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--electric-blue) 0%, var(--cyan-highlight) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-text p {
+      font-size: 1.15rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 2.5rem;
+      max-width: 540px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .trust-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .trust-badges span {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .trust-badges span::before {
+      content: '✓';
+      color: var(--premium-gold);
+      font-weight: 800;
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-img {
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 100%;
+      width: 500px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .floating-card {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--midnight-navy);
+      box-shadow: var(--shadow-md);
+      z-index: 2;
+      animation: float 6s ease-in-out infinite;
+      border: 1px solid rgba(214, 181, 116, 0.3);
+    }
+
+    .floating-card.card-1 {
+      top: 10%;
+      right: -10%;
+      animation-delay: 0s;
+    }
+
+    .floating-card.card-2 {
+      bottom: 15%;
+      left: -5%;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* =========================================
+       5. SECTIONS GENERAL STYLING
+       ========================================= */
+    section {
+      padding: 6rem 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 4rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      margin-bottom: 1rem;
+      color: var(--midnight-navy);
+    }
+
+    .section-header p {
+      font-size: 1.1rem;
+      color: #4B5563;
+    }
+
+    .gold-accent {
+      color: var(--premium-gold);
+    }
+
+    /* Reveal Animation Classes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+
+    /* =========================================
+       6. ABOUT SECTION
+       ========================================= */
+    #about {
+      background-color: var(--soft-ivory);
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-text p {
+      font-size: 1.1rem;
+      color: #4B5563;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .about-visual {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .about-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-smooth);
+    }
+
+    .about-visual:hover img {
+      transform: scale(1.03);
+    }
+
+    /* =========================================
+       7. FEATURES SECTION
+       ========================================= */
+    #features {
+      background-color: var(--crisp-white);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--soft-ivory);
+      padding: 2.5rem;
+      border-radius: 16px;
+      border: 1px solid rgba(18, 59, 114, 0.08);
+      transition: all var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--royal-blue), var(--electric-blue));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition-smooth);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: var(--midnight-navy);
+    }
+
+    .feature-card p {
+      color: #4B5563;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* =========================================
+       8. PROCESS SECTION
+       ========================================= */
+    #process {
+      background-color: var(--midnight-navy);
+      color: var(--crisp-white);
+    }
+
+    #process .section-header h2 {
+      color: var(--crisp-white);
+    }
+
+    #process .section-header p {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      position: relative;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 10%;
+      width: 80%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--premium-gold), transparent);
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    .step-card {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 1rem;
+    }
+
+    .step-number {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: var(--surface-light);
+      border: 2px solid var(--premium-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--premium-gold);
+      box-shadow: var(--shadow-glow-gold);
+      transition: all var(--transition-smooth);
+    }
+
+    .step-card:hover .step-number {
+      background: var(--premium-gold);
+      color: var(--midnight-navy);
+      transform: scale(1.1);
+    }
+
+    .step-card h3 {
+      color: var(--crisp-white);
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .step-card p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* =========================================
+       9. ELECTIONS SECTION
+       ========================================= */
+    #elections {
+      background-color: var(--soft-ivory);
+    }
+
+    .elections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
+    }
+
+    .election-card {
+      background: var(--crisp-white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(18, 59, 114, 0.08);
+      transition: all var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .election-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .election-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(18, 59, 114, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .status-badge {
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-live {
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-upcoming {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--electric-blue);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .status-completed {
+      background: rgba(107, 114, 128, 0.1);
+      color: #4B5563;
+      border: 1px solid rgba(107, 114, 128, 0.3);
+    }
+
+    .election-body {
+      padding: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .election-body h3 {
+      font-size: 1.35rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .election-body p {
+      color: #4B5563;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .election-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: #6B7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .election-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .election-footer {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(18, 59, 114, 0.08);
+      background: rgba(247, 248, 252, 0.5);
+    }
+
+    .election-footer .btn {
+      width: 100%;
+    }
+
+    /* =========================================
+       10. SECURITY SECTION
+       ========================================= */
+    #security {
+      background: linear-gradient(180deg, var(--midnight-navy) 0%, var(--surface-dark) 100%);
+      color: var(--crisp-white);
+    }
+
+    #security .section-header h2 {
+      color: var(--crisp-white);
+    }
+
+    #security .section-header p {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .security-item {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      transition: all var(--transition-smooth);
+    }
+
+    .security-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--premium-gold);
+      transform: translateY(-4px);
+    }
+
+    .security-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .security-item h3 {
+      color: var(--crisp-white);
+      font-size: 1.15rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .security-item p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* =========================================
+       11. FAQ SECTION
+       ========================================= */
+    #faq {
+      background-color: var(--crisp-white);
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(18, 59, 114, 0.1);
+      margin-bottom: 0.5rem;
+    }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--midnight-navy);
+      transition: color var(--transition-fast);
+    }
+
+    .faq-question:hover {
+      color: var(--electric-blue);
+    }
+
+    .faq-icon {
+      font-size: 1.5rem;
+      color: var(--premium-gold);
+      transition: transform var(--transition-smooth);
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-smooth), padding var(--transition-smooth);
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+      padding-bottom: 1.5rem;
+    }
+
+    .faq-answer p {
+      color: #4B5563;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    /* =========================================
+       12. CTA SECTION
+       ========================================= */
+    #cta {
+      background: linear-gradient(135deg, var(--royal-blue) 0%, var(--midnight-navy) 100%);
+      color: var(--crisp-white);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+      animation: pulse-glow 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-content h2 {
+      color: var(--crisp-white);
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-content p {
+      font-size: 1.15rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* =========================================
+       13. FOOTER
+       ========================================= */
+    footer {
+      background-color: var(--midnight-navy);
+      color: rgba(255, 255, 255, 0.6);
+      padding: 4rem 0 2rem;
+      border-top: 1px solid rgba(214, 181, 116, 0.15);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand {
+      max-width: 300px;
+    }
+
+    .footer-brand .navbar-brand {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .footer-col h4 {
+      color: var(--crisp-white);
+      font-size: 1rem;
+      margin-bottom: 1.25rem;
+      font-weight: 600;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-col a {
+      font-size: 0.9rem;
+      transition: all var(--transition-fast);
+      display: inline-block;
+    }
+
+    .footer-col a:hover {
+      color: var(--premium-gold);
+      transform: translateX(4px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-bottom-links a:hover {
+      color: var(--crisp-white);
+    }
+
+    /* =========================================
+       14. APPLICATION PANEL (Full-Screen Slide-in)
+       ========================================= */
+    #applicationPanel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%; /* Covers entire screen width */
+      max-width: 100%;
+      height: 100vh; /* Covers entire screen height */
+      background: var(--crisp-white);
+      box-shadow: -8px 0 32px rgba(8, 20, 38, 0.2);
+      z-index: 2000;
+      transform: translateX(100%);
+      transition: transform var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+    }
+
+    #applicationPanel.active {
+      transform: translateX(0);
+    }
+
+    .panel-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 20, 38, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-smooth);
+    }
+
+    .panel-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(18, 59, 114, 0.1);
+      background: var(--soft-ivory);
+    }
+
+    .panel-header h3 {
+      font-size: 1.25rem;
+      color: var(--midnight-navy);
+    }
+
+    .close-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(18, 59, 114, 0.08);
+      color: var(--midnight-navy);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .close-btn:hover {
+      background: var(--midnight-navy);
+      color: var(--crisp-white);
+    }
+
+    .panel-content {
+      flex-grow: 1;
+      position: relative;
+      background: var(--midnight-navy);
+    }
+
+    #applicationIframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Premium Loader */
+    .iframe-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--midnight-navy);
+      color: var(--crisp-white);
+      z-index: 10;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader-ring {
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(214, 181, 116, 0.2);
+      border-top-color: var(--premium-gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 15px rgba(214, 181, 116, 0.3);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .iframe-loader p {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .fallback-link {
+      font-size: 0.85rem;
+      color: var(--electric-blue);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      transition: color var(--transition-fast);
+    }
+
+    .fallback-link:hover {
+      color: var(--premium-gold);
+    }
+
+    /* =========================================
+       15. RESPONSIVE DESIGN
+       ========================================= */
+    @media (max-width: 1024px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 3rem;
+      }
+
+      .hero-text p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+
+      .trust-badges {
+        justify-content: center;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .hero-img {
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .floating-card {
+        display: none;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-actions .btn {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .process-steps::before {
+        display: none;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .panel-header {
+        padding: 1rem 1.5rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <div class="container navbar-inner">
+      <a href="./index.html" class="navbar-brand">
+        <span class="logo-icon">I</span> Mfangano <span class="gold-text">Voting</span>
+      </a>
+      
+      <div class="navbar-actions">
+        <!-- Preserved ID for existing functionality -->
+        <button id="openApplicationBtn" class="btn btn-outline-gold open-application-trigger">
+          Register as Candidate or Judge
+        </button>
+        <a href="./voter.html" class="btn btn-primary-blue">
+          Portal <span class="arrow">→</span>
+        </a>
+        
+        <button class="mobile-menu-btn" aria-label="Toggle navigation menu" id="mobileMenuBtn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div id="navLinks">
+        <button class="btn btn-outline-gold open-application-trigger" style="width: 100%; margin-bottom: 0.5rem;">
+          Register as Candidate or Judge
+        </button>
+        <a href="./voter.html" class="btn btn-primary-blue" style="width: 100%;">
+          Enter Portal <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="hero-section">
+    <div class="hero-bg-image"></div>
+    <div class="hero-overlay"></div>
+    
+    <div class="container hero-content">
+      <div class="hero-text reveal">
+        <h1>Digital Voting, <span class="gradient-text">Redefined.</span></h1>
+        <p>Enterprise-grade online voting platform built for trust, transparency, and accessibility. Cast your vote securely from anywhere — with military-grade encryption protecting every ballot.</p>
+        
+        <div class="hero-actions">
+          <a href="./voter.html" class="btn btn-primary-blue btn-lg">Cast Your Vote</a>
+          <a href="./how-it-works.html" class="btn btn-outline-white btn-lg">How It Works</a>
+        </div>
+        
+        <div class="trust-badges">
+          <span>ISO 27001</span>
+          <span>SOC 2 Type II</span>
+          <span>GDPR Compliant</span>
+          <span>WCAG 2.1 AA</span>
+        </div>
+      </div>
+      
+      <div class="hero-visual reveal delay-1">
+        <!-- High-quality reliable image of diverse voters -->
+        <img src="https://plus.unsplash.com/premium_photo-1708598525588-eae2b2d05a9e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" alt="Diverse people participating in democratic election" class="hero-img">
+        <div class="floating-card card-1">🛡️ Military-Grade Security</div>
+        <div class="floating-card card-2">📊 Real-Time Results</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section id="about">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text reveal">
+          <h2>A New Standard for <span class="gold-accent">Digital Democracy</span></h2>
+          <p>Welcome to ISAAC — an enterprise-grade voting platform designed at the intersection of security, transparency, and accessibility. Built for modern institutions that demand nothing less than excellence.</p>
+          <p>Leave outdated voting methods behind. Our platform delivers a sanctuary of trust where every vote is protected, every result is verifiable, and every voice is heard — regardless of where your voters are in the world.</p>
+          <a href="./isaac.html" class="btn btn-primary-blue" style="margin-top: 1rem;">Learn More About ISAAC</a>
+        </div>
+        <div class="about-visual reveal delay-1">
+          <!-- High-quality reliable image of civic engagement/meeting -->
+          <img src="https://images.unsplash.com/photo-1720128401458-5e855a8dabb6?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" alt="Diverse group engaged in democratic process">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Platform Features</h2>
+        <p>Every feature is designed with security, accessibility, and user experience at its core — delivering a voting experience you can trust.</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card reveal delay-1">
+          <span class="feature-icon">🛡️</span>
+          <h3>Military-Grade Security</h3>
+          <p>256-bit AES encryption protects every ballot. Multi-factor authentication and zero-knowledge proofs ensure your vote remains anonymous and tamper-proof.</p>
+        </div>
+        
+        <div class="feature-card reveal delay-2">
+          <span class="feature-icon">👁️</span>
+          <h3>Full Transparency</h3>
+          <p>Real-time audit trails, publicly verifiable results, and blockchain-backed receipts. Every vote is traceable without compromising voter privacy.</p>
+        </div>
+        
+        <div class="feature-card reveal delay-3">
+          <span class="feature-icon">♿</span>
+          <h3>Universal Accessibility</h3>
+          <p>WCAG 2.1 AA compliant with screen reader support, keyboard navigation, multi-language options, and adaptive interfaces for every voter.</p>
+        </div>
+        
+        <div class="feature-card reveal delay-1">
+          <span class="feature-icon">📊</span>
+          <h3>Real-Time Results</h3>
+          <p>Watch election results update live with interactive charts and detailed analytics. Complete transparency from the first vote to the final count.</p>
+        </div>
+        
+        <div class="feature-card reveal delay-2">
+          <span class="feature-icon">📱</span>
+          <h3>Mobile-First Design</h3>
+          <p>Vote seamlessly from any device — phone, tablet, or desktop. Optimized for speed with offline capabilities and instant synchronization.</p>
+        </div>
+        
+        <div class="feature-card reveal delay-3">
+          <span class="feature-icon">📜</span>
+          <h3>Complete Audit Trail</h3>
+          <p>Every action is logged with cryptographic timestamps. Independent auditors can verify election integrity without accessing voter identities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS SECTION -->
+  <section id="process">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Vote in 4 Simple Steps</h2>
+        <p>From verification to confirmation — our streamlined workflow gets you from login to ballot in under 60 seconds.</p>
+      </div>
+      
+      <div class="process-steps">
+        <div class="step-card reveal delay-1">
+          <div class="step-number">1</div>
+          <h3>Verify Identity</h3>
+          <p>Enter your unique voter ID and complete secure multi-factor authentication to access the voting portal.</p>
+        </div>
+        
+        <div class="step-card reveal delay-2">
+          <div class="step-number">2</div>
+          <h3>Review Candidates</h3>
+          <p>Browse detailed candidate profiles, read manifestos, and compare positions across all open elections.</p>
+        </div>
+        
+        <div class="step-card reveal delay-3">
+          <div class="step-number">3</div>
+          <h3>Cast Your Vote</h3>
+          <p>Select your preferred candidates with our intuitive interface. Review your choices before final submission.</p>
+        </div>
+        
+        <div class="step-card reveal delay-1">
+          <div class="step-number">4</div>
+          <h3>Get Receipt</h3>
+          <p>Receive a cryptographically signed receipt confirming your vote was recorded. Track it in real-time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ELECTIONS SECTION -->
+  <section id="elections">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Active Elections</h2>
+        <p>Stay informed about all active and upcoming elections. Your participation shapes our community's future.</p>
+      </div>
+      
+      <div class="elections-grid">
+        <div class="election-card reveal delay-1">
+          <div class="election-header">
+            <h3>Student Elections 2026</h3>
+            <span class="status-badge status-live">Live Now</span>
+          </div>
+          <div class="election-body">
+            <p>The official annual student leadership election. Vote for your preferred candidates across 10 executive positions.</p>
+            <div class="election-meta">
+              <span>📅 June 1 – June 15, 2026</span>
+              <span>🔓 24/7 Access</span>
+              <span>📈 Voter Turnout: 72% Complete</span>
+            </div>
+          </div>
+          <div class="election-footer">
+            <a href="./voter.html" class="btn btn-primary-blue">Vote Now</a>
+          </div>
+        </div>
+        
+        <div class="election-card reveal delay-2">
+          <div class="election-header">
+            <h3>House Captain Elections</h3>
+            <span class="status-badge status-upcoming">Upcoming</span>
+          </div>
+          <div class="election-body">
+            <p>Elect leaders for each residential house for the 2026/2027 academic year. Four houses, four leaders.</p>
+            <div class="election-meta">
+              <span>📅 July 10, 2026</span>
+              <span>🏠 4 Houses</span>
+              <span>📝 Registration: 45% Complete</span>
+            </div>
+          </div>
+          <div class="election-footer">
+            <button class="btn btn-outline-gold" style="width: 100%;">Set Reminder</button>
+          </div>
+        </div>
+        
+        <!-- Budget Referendum 2026 card has been completely removed as requested -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SECURITY SECTION -->
+  <section id="security">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Enterprise-Grade Security You Can Trust</h2>
+        <p>Your vote is protected by multiple layers of security, from end-to-end encryption to independent audits.</p>
+      </div>
+      
+      <div class="security-grid">
+        <div class="security-item reveal delay-1">
+          <span class="security-icon">🔒</span>
+          <h3>End-to-End Encryption</h3>
+          <p>256-bit AES encryption protects your ballot from the moment you cast it until it's counted.</p>
+        </div>
+        
+        <div class="security-item reveal delay-2">
+          <span class="security-icon">🔑</span>
+          <h3>Multi-Factor Authentication</h3>
+          <p>Multiple identity verification layers ensure only eligible voters can access the ballot.</p>
+        </div>
+        
+        <div class="security-item reveal delay-3">
+          <span class="security-icon">🎭</span>
+          <h3>Anonymous Ballots</h3>
+          <p>Zero-knowledge proofs verify eligibility without revealing voter identity or choices.</p>
+        </div>
+        
+        <div class="security-item reveal delay-1">
+          <span class="security-icon">🛡️</span>
+          <h3>Independent Audits</h3>
+          <p>Regular third-party security audits and penetration testing by certified firms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Frequently Asked Questions</h2>
+        <p>Everything you need to know about voting securely and confidently on our platform.</p>
+      </div>
+      
+      <div class="faq-container">
+        <div class="faq-item reveal delay-1">
+          <button class="faq-question">
+            Is my vote really anonymous?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, absolutely. We use advanced cryptographic techniques including zero-knowledge proofs that verify your eligibility to vote without ever linking your identity to your ballot. Even our system administrators cannot see how you voted. Your privacy is mathematically guaranteed.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item reveal delay-2">
+          <button class="faq-question">
+            What devices can I use to vote?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>You can vote from any modern device with an internet connection — smartphones (iOS & Android), tablets, laptops, or desktop computers. Our platform is fully responsive and works with all major browsers including Chrome, Firefox, Safari, and Edge.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item reveal delay-3">
+          <button class="faq-question">
+            Can I change my vote after submitting?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>For security and audit integrity, votes cannot be changed once submitted. This ensures the integrity of the election process. However, you can review all your selections carefully before final submission in our confirmation screen.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item reveal delay-1">
+          <button class="faq-question">
+            How do I know my vote was counted?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>After submitting your vote, you'll receive a unique cryptographically signed receipt with a tracking ID. You can use this receipt to verify that your ballot was included in the final count without revealing your choices.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item reveal delay-2">
+          <button class="faq-question">
+            What if I forget my voter ID?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Contact your election administrator or visit the student services office with valid identification. They can verify your identity and provide your voter credentials through a secure recovery process.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item reveal delay-3">
+          <button class="faq-question">
+            Is the platform accessible for voters with disabilities?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! Our platform is WCAG 2.1 AA compliant and includes full screen reader support, keyboard navigation, high contrast modes, adjustable text sizes, and multi-language support.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section id="cta">
+    <div class="container">
+      <div class="cta-content reveal">
+        <h2>Your Voice Matters. Make It Count.</h2>
+        <p>Join thousands of voters who have already cast their ballots in the Student Elections 2026. Secure, transparent, and democratic — voting has never been this easy.</p>
+        <div class="cta-actions">
+          <a href="./voter.html" class="btn btn-primary-blue btn-lg">Enter Voting Portal</a>
+          <a href="./voter.html" class="btn btn-outline-white btn-lg">Admin Access</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="./index.html" class="navbar-brand">
+            <span class="logo-icon">I</span> Mfangano <span class="gold-text">Voting</span>
+          </a>
+          <p>Enterprise-grade online voting platform built for trust, transparency, and accessibility. Empowering democratic participation in the digital age.</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="./voter.html">Voter Portal</a></li>
+            <li><a href="./admin.html">Admin Panel</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#elections">Elections</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="./how-it-works.html">How It Works</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="./isaac.html">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">Status Page</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Accessibility</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2026 ISAAC Voting System · Build 3.0 · All rights reserved</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- APPLICATION PANEL (Full-Screen Slide-in, Preserved IDs & Functionality) -->
+  <div class="panel-overlay" id="panelOverlay"></div>
+  <div id="applicationPanel">
+    <div class="panel-header">
+      <h3>Candidate & Judge Application</h3>
+      <button id="closePanelBtn" class="close-btn" aria-label="Close application panel">×</button>
+    </div>
+    <div class="panel-content">
+      <div id="iframeLoader" class="iframe-loader">
+        <div class="loader-ring"></div>
+        <p>Initializing secure application environment...</p>
+        <a href="https://mfanganovettingsystem.lovable.app" target="_blank" class="fallback-link">Open in new tab if loading takes too long</a>
+      </div>
+      <!-- Preserved ID and original URL -->
+      <iframe id="applicationIframe" src="https://mfanganovettingsystem.lovable.app" title="Candidate and Judge Application" onload="document.getElementById('iframeLoader').style.display='none'"></iframe>
+    </div>
+  </div>
+
+  <!-- VISUAL-ONLY JAVASCRIPT (Preserves all existing logic) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Navbar Scroll Effect
+      const navbar = document.getElementById('navbar');
+      const handleScroll = () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll(); // Initial check
+
+      // 2. Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      
+      if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => {
+          navLinks.classList.toggle('active');
+          const spans = mobileMenuBtn.querySelectorAll('span');
+          if (navLinks.classList.contains('active')) {
+            spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+            spans[1].style.opacity = '0';
+            spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+          } else {
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+          }
+        });
+      }
+
+      // 3. Application Panel Logic (Preserving existing IDs and behavior)
+      const applicationPanel = document.getElementById('applicationPanel');
+      const panelOverlay = document.getElementById('panelOverlay');
+      const openApplicationBtns = document.querySelectorAll('#openApplicationBtn, .open-application-trigger');
+      const closePanelBtn = document.getElementById('closePanelBtn');
+
+      const openPanel = () => {
+        if (applicationPanel) applicationPanel.classList.add('active');
+        if (panelOverlay) panelOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        // Close mobile menu if open
+        if (navLinks) {
+          navLinks.classList.remove('active');
+          const spans = mobileMenuBtn.querySelectorAll('span');
+          spans[0].style.transform = 'none';
+          spans[1].style.opacity = '1';
+          spans[2].style.transform = 'none';
+        }
+      };
+
+      const closePanel = () => {
+        if (applicationPanel) applicationPanel.classList.remove('active');
+        if (panelOverlay) panelOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      };
+
+      openApplicationBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openPanel();
+        });
+      });
+
+      if (closePanelBtn) {
+        closePanelBtn.addEventListener('click', closePanel);
+      }
+      
+      if (panelOverlay) {
+        panelOverlay.addEventListener('click', closePanel);
+      }
+
+      // Close panel on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && applicationPanel && applicationPanel.classList.contains('active')) {
+          closePanel();
+        }
+      });
+
+      // 4. FAQ Accordion Logic
+      const faqQuestions = document.querySelectorAll('.faq-question');
+      faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+          const item = question.parentElement;
+          const isActive = item.classList.contains('active');
+          
+          // Close all others
+          document.querySelectorAll('.faq-item').forEach(faq => {
+            faq.classList.remove('active');
+          });
+          
+          // Toggle current
+          if (!isActive) {
+            item.classList.add('active');
+          }
+        });
+      });
+
+      // 5. Scroll Reveal Animation (Intersection Observer)
+      const revealElements = document.querySelectorAll('.reveal');
+      
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+              revealObserver.unobserve(entry.target); // Only animate once
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+      } else {
+        // Fallback for older browsers
+        revealElements.forEach(el => el.classList.add('active'));
+      }
+    });
+  </script>
+</body>
+</html>
