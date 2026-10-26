@@ -33,11 +33,11 @@
       --font-heading: 'Plus Jakarta Sans', sans-serif;
       --font-body: 'Inter', sans-serif;
       
-      --shadow-sm: 0 2px 8px rgba(8, 20, 38, 0.08);
-      --shadow-md: 0 8px 24px rgba(8, 20, 38, 0.12);
-      --shadow-lg: 0 16px 48px rgba(8, 20, 38, 0.18);
+      --shadow-sm: 0 2px 8px rgba(8, 20, 38, 0.06);
+      --shadow-md: 0 8px 24px rgba(8, 20, 38, 0.10);
+      --shadow-lg: 0 16px 48px rgba(8, 20, 38, 0.15);
       --shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
-      --shadow-glow-gold: 0 0 20px rgba(214, 181, 116, 0.2);
+      --shadow-glow-gold: 0 0 20px rgba(214, 181, 116, 0.25);
 
       --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -149,6 +149,35 @@
       border-color: var(--crisp-white);
     }
 
+    /* NEW: Back to School Button */
+    .btn-school {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      border: 1px solid rgba(214, 181, 116, 0.3);
+      background: rgba(8, 20, 38, 0.5);
+      color: var(--premium-gold);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      text-decoration: none;
+    }
+
+    .btn-school:hover {
+      background: rgba(214, 181, 116, 0.15);
+      border-color: var(--premium-gold);
+      color: var(--premium-gold-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow-gold);
+    }
+
     .arrow {
       transition: transform var(--transition-fast);
     }
@@ -172,7 +201,7 @@
     }
 
     #navbar.scrolled {
-      background: rgba(8, 20, 38, 0.85);
+      background: rgba(8, 20, 38, 0.9);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(214, 181, 116, 0.15);
@@ -286,7 +315,6 @@
     .hero-bg-image {
       position: absolute;
       inset: 0;
-      /* High-quality reliable image of a ballot/voting concept */
       background-image: url('https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&q=80&w=1600');
       background-size: cover;
       background-position: center;
@@ -302,7 +330,8 @@
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, var(--midnight-navy) 0%, rgba(8, 20, 38, 0.85) 50%, rgba(8, 20, 38, 0.4) 100%);
+      /* Enhanced gradient for better text readability and premium outlook */
+      background: linear-gradient(90deg, var(--midnight-navy) 0%, rgba(8, 20, 38, 0.92) 45%, rgba(8, 20, 38, 0.7) 100%);
     }
 
     .hero-overlay::after {
@@ -341,7 +370,7 @@
 
     .hero-text p {
       font-size: 1.15rem;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.85);
       margin-bottom: 2.5rem;
       max-width: 540px;
       line-height: 1.7;
@@ -455,7 +484,6 @@
       color: var(--premium-gold);
     }
 
-    /* Reveal Animation Classes */
     .reveal {
       opacity: 0;
       transform: translateY(30px);
@@ -532,10 +560,11 @@
       background: var(--soft-ivory);
       padding: 2.5rem;
       border-radius: 16px;
-      border: 1px solid rgba(18, 59, 114, 0.08);
+      border: 1px solid rgba(18, 59, 114, 0.06);
       transition: all var(--transition-smooth);
       position: relative;
       overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(8, 20, 38, 0.02), 0 2px 4px -1px rgba(8, 20, 38, 0.02);
     }
 
     .feature-card::before {
@@ -675,7 +704,7 @@
       border-radius: 16px;
       overflow: hidden;
       box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(18, 59, 114, 0.08);
+      border: 1px solid rgba(18, 59, 114, 0.06);
       transition: all var(--transition-smooth);
       display: flex;
       flex-direction: column;
@@ -688,7 +717,7 @@
 
     .election-header {
       padding: 1.5rem;
-      border-bottom: 1px solid rgba(18, 59, 114, 0.08);
+      border-bottom: 1px solid rgba(18, 59, 114, 0.06);
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -755,7 +784,7 @@
 
     .election-footer {
       padding: 1.5rem;
-      border-top: 1px solid rgba(18, 59, 114, 0.08);
+      border-top: 1px solid rgba(18, 59, 114, 0.06);
       background: rgba(247, 248, 252, 0.5);
     }
 
@@ -1022,9 +1051,9 @@
       position: fixed;
       top: 0;
       right: 0;
-      width: 100%; /* Covers entire screen width */
+      width: 100%;
       max-width: 100%;
-      height: 100vh; /* Covers entire screen height */
+      height: 100vh;
       background: var(--crisp-white);
       box-shadow: -8px 0 32px rgba(8, 20, 38, 0.2);
       z-index: 2000;
@@ -1101,7 +1130,6 @@
       display: block;
     }
 
-    /* Premium Loader */
     .iframe-loader {
       position: absolute;
       inset: 0;
@@ -1195,7 +1223,9 @@
     }
 
     @media (max-width: 768px) {
-      .navbar-actions .btn {
+      .navbar-actions .btn-school,
+      .navbar-actions .btn-outline-gold,
+      .navbar-actions .btn-primary-blue {
         display: none;
       }
 
@@ -1246,6 +1276,12 @@
       </a>
       
       <div class="navbar-actions">
+        <!-- NEW: Back to Our School Button -->
+        <a href="https://pefamfanganocdc.org" class="btn btn-school" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Back to Our School
+        </a>
+        
         <!-- Preserved ID for existing functionality -->
         <button id="openApplicationBtn" class="btn btn-outline-gold open-application-trigger">
           Register as Candidate or Judge
@@ -1263,6 +1299,10 @@
 
       <!-- Mobile Navigation -->
       <div id="navLinks">
+        <a href="https://pefamfanganocdc.org" class="btn btn-school" target="_blank" rel="noopener noreferrer" style="width: 100%; margin-bottom: 0.5rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Back to Our School
+        </a>
         <button class="btn btn-outline-gold open-application-trigger" style="width: 100%; margin-bottom: 0.5rem;">
           Register as Candidate or Judge
         </button>
@@ -1297,7 +1337,6 @@
       </div>
       
       <div class="hero-visual reveal delay-1">
-        <!-- High-quality reliable image of diverse voters -->
         <img src="https://plus.unsplash.com/premium_photo-1708598525588-eae2b2d05a9e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" alt="Diverse people participating in democratic election" class="hero-img">
         <div class="floating-card card-1">🛡️ Military-Grade Security</div>
         <div class="floating-card card-2">📊 Real-Time Results</div>
@@ -1316,7 +1355,6 @@
           <a href="./isaac.html" class="btn btn-primary-blue" style="margin-top: 1rem;">Learn More About ISAAC</a>
         </div>
         <div class="about-visual reveal delay-1">
-          <!-- High-quality reliable image of civic engagement/meeting -->
           <img src="https://images.unsplash.com/photo-1720128401458-5e855a8dabb6?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" alt="Diverse group engaged in democratic process">
         </div>
       </div>
@@ -1451,8 +1489,6 @@
             <button class="btn btn-outline-gold" style="width: 100%;">Set Reminder</button>
           </div>
         </div>
-        
-        <!-- Budget Referendum 2026 card has been completely removed as requested -->
       </div>
     </div>
   </section>
@@ -1648,7 +1684,6 @@
         <p>Initializing secure application environment...</p>
         <a href="https://mfanganovettingsystem.lovable.app" target="_blank" class="fallback-link">Open in new tab if loading takes too long</a>
       </div>
-      <!-- Preserved ID and original URL -->
       <iframe id="applicationIframe" src="https://mfanganovettingsystem.lovable.app" title="Candidate and Judge Application" onload="document.getElementById('iframeLoader').style.display='none'"></iframe>
     </div>
   </div>
